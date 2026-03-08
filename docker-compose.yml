@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-test
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    # Enforce 300MB memory limit
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+        reservations:
+          memory: 200M
+    # Alternative memory limit syntax for older docker-compose versions
+    mem_limit: 300m
+    memswap_limit: 300m
+    restart: unless-stopped
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
